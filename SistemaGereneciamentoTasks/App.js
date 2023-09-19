@@ -1,77 +1,26 @@
-import React, { Component } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  TouchableOpacity,
-  ScrollView,
-  SafeAreaView,
-} from "react-native";
-import telaLogin from "./src/styles/styles";
-class LoginScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: "",
-      password: "",
-    };
-  }
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import LoginScreen from './src/components/LoginScreen';
+import RegistrarScreen from './src/components/RegistrarScreen';
+import RecuperarSenhaScreen from './src/components/RecuperarSenhaScreen';
+import HomeScreen from './src/components/HomeScreen';
 
-  handleLogin = () => {
-    // Lógica para autenticar o usuário
-    // Você pode implementar sua própria lógica de autenticação aqui
-    const { username, password } = this.state;
-    if (username === "seu_usuario" && password === "sua_senha") {
-      alert("Login bem-sucedido!");
-    } else {
-      alert("Login falhou. Verifique seu nome de usuário e senha.");
-    }
-  };
 
-  handleForgotPassword = () => {
-    // Lógica para recuperar a senha do usuário
-    // Implemente sua própria lógica de recuperação de senha aqui
-    alert("Esqueci minha senha!");
-  };
 
-  handleSignUp = () => {
-    // Navegue para a tela de registro ou execute a lógica de registro
-    // Implemente sua própria lógica de registro aqui
-    alert("Ir para a tela de registro");
-  };
+const Stack = createStackNavigator();
 
-  render() {
-    return (
-      <SafeAreaView>
-        <ScrollView>
-          <View style={telaLogin.container}>
-            <Text style={telaLogin.title}>Login</Text>
-
-            <TextInput
-              style={telaLogin.input}
-              placeholder="Email"
-              onChangeText={(text) => this.setState({ username: text })}
-            />
-            <TextInput
-              style={telaLogin.input}
-              placeholder="Senha"
-              secureTextEntry={true}
-              onChangeText={(text) => this.setState({ password: text })}
-            />
-
-            <View style={telaLogin.viewButtons}>
-              <Button title="Entrar" onPress={this.handleLogin} />
-
-              <Button title="Cadastrar" onPress={this.handleSignUp} />
-            </View>
-            <TouchableOpacity onPress={this.handleForgotPassword}>
-              <Text style={telaLogin.forgotPassword}>Esqueci minha senha</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    );
-  }
+function App() { 
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name="Login" component={LoginScreen} options={{headerShown:false}}/>
+        <Stack.Screen name="RegistrarScreen" component={RegistrarScreen} options={{headerShown:false}} />
+        <Stack.Screen name="RecuperarSenhaScreen" component={RecuperarSenhaScreen} options={{headerShown:false}} />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} options={{headerShown:false}} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
-export default LoginScreen;
+
+export default App;

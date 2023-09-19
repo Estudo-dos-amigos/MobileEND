@@ -1,36 +1,60 @@
 import {StyleSheet} from 'react-native';
-const styles = StyleSheet.create({
+const stylesLogin = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
-    paddingTop: 20,
+    paddingHorizontal: 20,
+    
   },
-  
-  title: {
-    fontSize: 24,
-    marginBottom: 16,
+  label: {
+    fontSize: 16,
+    marginBottom: 5,
   },
-  input: {  
-    width: '100%',
+  input: {
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 16,
-    paddingLeft: 8,
+    marginBottom: 15,
+    paddingHorizontal: 10,
   },
-  forgotPassword: {
+  button: {
+    marginBottom: 1,
+  },
+  imagem: {
+    width: 350, 
+    height: 100, 
+    marginTop: 50,
+
+  },
+  imagecontainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 60,
+  },
+  recuperarsenha:{
     color: 'red',
-    marginBottom: 16,
-    padding: 16,
+    paddingBottom:5,
+    
   },
-  viewButtons: {
+  registerpress:{
+    paddingTop: 20,
+    fontSize: 17,
+    
+  },
+  textpress: {
+    justifyContent: 'center',
     flexDirection: 'row',
-    padding: 16,
-    gap: 8
+    gap: 100,    
+  },
+  socialmedia: {
+    justifyContent: 'center',
+    flexDirection: 'row',
+    gap: 20, 
+  },
+    socialicons: {
+      paddingTop: 20,
   },
 });
 
-export default telaLogin
+export default stylesLogin
