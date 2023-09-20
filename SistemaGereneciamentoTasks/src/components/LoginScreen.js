@@ -13,18 +13,35 @@ import stylesLogin from "../styles/styles";
 import {AntDesign} from '@expo/vector-icons'
 
 function LoginScreen({ navigation }) {
-  const [login, setLogin] = useState("");
-  const [senha, setSenha] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleRegistrarPress = () => {
     navigation.navigate("RegistrarScreen");
   };
 
-  const handleEntrarPress = () => {
-    if (login === "teste" && senha === "teste") {
-      navigation.navigate("HomeScreen");
-    } else {
-      alert("Login ou senha inválidos. Tente novamente.");
+  const handleEntrarPress = async () => {
+    try {
+      const response = await fetch("https://api-primos.onrender.com/user/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      if (response.ok) {
+        console.log("Acesso completo!");
+        navigation.navigate("HomeScreen");
+      } else {
+        const data = await response.json();
+        console.error("Erro de registro:", data.error);
+      }
+    } catch (error) {
+      console.error("Erro", error);
     }
   };
 
@@ -44,16 +61,16 @@ function LoginScreen({ navigation }) {
         <View style={stylesLogin.container}>
           <TextInput
             style={stylesLogin.input}
-            placeholder="Digite seu login"
-            value={login}
-            onChangeText={setLogin}
+            placeholder="Digite seu email"
+            value={email}
+            onChangeText={setEmail}
           />
 
           <TextInput
             style={stylesLogin.input}
             placeholder="Digite sua senha"
-            value={senha}
-            onChangeText={setSenha}
+            value={password}
+            onChangeText={setPassword}
             secureTextEntry={true}
           />
                       <TouchableOpacity onPress={handleRecuperarSenhaPress}>
