@@ -7,6 +7,8 @@ import {
   SafeAreaView,
   ScrollView,
   Image,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import stylesRegistrar from "../styles/stylesRegistrar";
@@ -18,6 +20,7 @@ const RegistrarScreen = () => {
   const [password, setPassword] = useState("");
   const [confirmarPassword, setConfirmarPassword] = useState("");
   const [dataNascimento, setDataNascimento] = useState("");
+  const [loading, setLoading] = useState(false); 
 
   const handleDataNascimentoChange = (text) => {
     const numericInput = text.replace(/[^0-9]/g, '');
@@ -33,6 +36,8 @@ const RegistrarScreen = () => {
 
   const handleRegistro = async () => {
     if (email && password && password === confirmarPassword) {
+      setLoading(true); 
+
       try {
         const response = await fetch("https://api-primos.onrender.com/user/auth/register", {
           method: "POST",
@@ -48,13 +53,17 @@ const RegistrarScreen = () => {
 
         if (response.ok) {
           console.log("Registro bem-sucedido!");
+          Alert.alert('Sucesso!');
           navigation.navigate("Login");
         } else {
           const data = await response.json();
           console.error("Erro de registro:", data.error);
+          Alert.alert('Falhou, talvez o email já esteja em uso!');
         }
       } catch (error) {
         console.error("Erro ao registrar:", error);
+      } finally {
+        setLoading(false); 
       }
     } else {
       console.error("Campos inválidos ou senha não corresponde à confirmação.");
@@ -113,7 +122,14 @@ const RegistrarScreen = () => {
             keyboardType="numeric"
             maxLength={10} 
           />
-          <Button title="Registrar" onPress={handleRegistro} />
+          {loading ? (
+            <View>
+              <ActivityIndicator size="large" color="#007AFF" />
+              <Text>Carregando...</Text>
+            </View>
+          ) : (
+            <Button title="Registrar" onPress={handleRegistro} />
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>

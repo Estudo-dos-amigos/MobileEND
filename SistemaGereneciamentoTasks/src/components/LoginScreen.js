@@ -8,40 +8,52 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
 import stylesLogin from "../styles/styles";
-import {AntDesign} from '@expo/vector-icons'
 
 function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleRegistrarPress = () => {
     navigation.navigate("RegistrarScreen");
   };
 
   const handleEntrarPress = async () => {
+    setLoading(true);
+
     try {
-      const response = await fetch("https://api-primos.onrender.com/user/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
+      const response = await fetch(
+        "https://api-primos.onrender.com/user/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        }
+      );
 
       if (response.ok) {
         console.log("Acesso completo!");
+        Alert.alert("Sucesso!");
         navigation.navigate("HomeScreen");
       } else {
         const data = await response.json();
-        console.error("Erro de registro:", data.error);
+        console.error("Usuário ou senha incorretos.");
+        Alert.alert("Usuário ou senha incorretos!");
       }
     } catch (error) {
-      console.error("Erro", error);
+      console.error( error);
+      Alert.alert("Usuário ou senha incorretos!");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -73,24 +85,30 @@ function LoginScreen({ navigation }) {
             onChangeText={setPassword}
             secureTextEntry={true}
           />
-                      <TouchableOpacity onPress={handleRecuperarSenhaPress}>
-              <Text style={stylesLogin.recuperarsenha}>Esqueceu a senha?</Text>
-            </TouchableOpacity>
-          <Button
-            title="Entrar"
-            onPress={handleEntrarPress}
-            style={stylesLogin.button}
-          />
+          <TouchableOpacity onPress={handleRecuperarSenhaPress}>
+            <Text style={stylesLogin.recuperarsenha}>Esqueceu a senha?</Text>
+          </TouchableOpacity>
+
+          {loading ? (
+            <View>
+              <ActivityIndicator size="large" color="#007AFF" />
+              <Text>Conectando...</Text>
+            </View>
+          ) : (
+            <Button
+              title="Entrar"
+              onPress={handleEntrarPress}
+              style={stylesLogin.button}
+            />
+          )}
 
           <View style={stylesLogin.textpress}>
             <TouchableOpacity onPress={handleRegistrarPress}>
-              <Text style={stylesLogin.registerpress}>Não sou membro!</Text>
+              <Text style={stylesLogin.registerpress}>
+                Não é membro? Cadastre-se!
+              </Text>
             </TouchableOpacity>
-            <View style={stylesLogin.socialmedia}>
-            <AntDesign style={stylesLogin.socialicons} name="googleplus" size={35} color="red" /> 
-            <AntDesign style={stylesLogin.socialicons} name="twitter" size={35} color="blue" />    
-            </View>        
-            </View>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

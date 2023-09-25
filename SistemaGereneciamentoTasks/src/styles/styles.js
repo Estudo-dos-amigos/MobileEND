@@ -40,10 +40,11 @@ const stylesLogin = StyleSheet.create({
   registerpress:{
     paddingTop: 20,
     fontSize: 17,
+    textDecorationLine: 'underline',
     
   },
   textpress: {
-    justifyContent: 'center',
+    justifyContent: 'left',
     flexDirection: 'row',
     gap: 100,    
   },
@@ -55,6 +56,12 @@ const stylesLogin = StyleSheet.create({
     socialicons: {
       paddingTop: 20,
   },
+
+  loudingscreen: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+},
 });
 
 export default stylesLogin
