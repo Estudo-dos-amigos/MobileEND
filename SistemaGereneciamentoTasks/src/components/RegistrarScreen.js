@@ -19,20 +19,9 @@ const RegistrarScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmarPassword, setConfirmarPassword] = useState("");
-  const [dataNascimento, setDataNascimento] = useState("");
   const [loading, setLoading] = useState(false); 
 
-  const handleDataNascimentoChange = (text) => {
-    const numericInput = text.replace(/[^0-9]/g, '');
 
-    if (numericInput.length <= 2) {
-      setDataNascimento(numericInput);
-    } else if (numericInput.length <= 4) {
-      setDataNascimento(`${numericInput.slice(0, 2)}/${numericInput.slice(2)}`);
-    } else {
-      setDataNascimento(`${numericInput.slice(0, 2)}/${numericInput.slice(2, 4)}/${numericInput.slice(4, 8)}`);
-    }
-  };
 
   const handleRegistro = async () => {
     if (email && password && password === confirmarPassword) {
@@ -111,16 +100,6 @@ const RegistrarScreen = () => {
             onChangeText={(text) => setConfirmarPassword(text)}
             value={confirmarPassword}
             secureTextEntry
-          />
-
-          <Text>Data de Nascimento:</Text>
-          <TextInput
-            style={stylesRegistrar.input}
-            placeholder="dd/mm/aaaa"
-            value={dataNascimento}
-            onChangeText={handleDataNascimentoChange}
-            keyboardType="numeric"
-            maxLength={10} 
           />
           {loading ? (
             <View>
