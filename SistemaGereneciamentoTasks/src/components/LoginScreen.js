@@ -12,6 +12,8 @@ import {
   Alert,
 } from "react-native";
 import stylesLogin from "../styles/styles";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -24,7 +26,7 @@ function LoginScreen({ navigation }) {
 
   const handleEntrarPress = async () => {
     setLoading(true);
-
+  
     try {
       const response = await fetch(
         "https://api-primos.onrender.com/user/auth/login",
@@ -39,10 +41,13 @@ function LoginScreen({ navigation }) {
           }),
         }
       );
-
+  
       if (response.ok) {
+        const data = await response.json();
+        const token = data.token; 
+        await AsyncStorage.setItem('token', token);
+  
         console.log("Acesso completo!");
-        Alert.alert("Sucesso!");
         navigation.navigate("HomeScreen");
       } else {
         const data = await response.json();
@@ -50,7 +55,7 @@ function LoginScreen({ navigation }) {
         Alert.alert("Usuário ou senha incorretos!");
       }
     } catch (error) {
-      console.error( error);
+      console.error(error);
       Alert.alert("Usuário ou senha incorretos!");
     } finally {
       setLoading(false);
