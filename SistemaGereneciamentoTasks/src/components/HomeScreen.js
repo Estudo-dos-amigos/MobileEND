@@ -5,8 +5,9 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
-  SafeAreaView,
   Image,
+  Modal,
+  Pressable,
   Button,
 } from "react-native";
 import stylesHome from "../styles/stylesHome";
@@ -21,6 +22,9 @@ const EntrarScreen = () => {
   const [bearerToken, setBearerToken] = useState("");
   const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisibleTask, setModalVisibleTask] = useState(false);
+
 
   useEffect(() => {
     AsyncStorage.getItem("token")
@@ -66,7 +70,7 @@ const EntrarScreen = () => {
 
   const editTask = (taskId, updatedTask) => {
     fetch(`${API_BASE_URL}/${taskId}`, {
-      method: "PUT",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${bearerToken}`,
@@ -119,7 +123,7 @@ const EntrarScreen = () => {
   };
 
   return (
-    <SafeAreaView>
+    <View>
       <View style={stylesHome.imagecontainer}>
         <Image
           source={require("../assets/TITLE.png")}
@@ -127,26 +131,6 @@ const EntrarScreen = () => {
         />
       </View>
 
-      <View style={stylesHome.container}>
-        <Text style={stylesHome.newtasktitle}>Criar nova tarefa:</Text>
-        <TextInput
-          placeholder="Título da tarefa"
-          value={newTask.name}
-          onChangeText={(text) => setNewTask({ ...newTask, name: text })}
-        />
-        <TextInput
-          placeholder="Descrição da tarefa"
-          value={newTask.description}
-          onChangeText={(text) => setNewTask({ ...newTask, description: text })}
-        />
-        <View style={stylesHome.buttoncriar}>
-          <Button color="#54C87E" title="+" onPress={createTask}></Button>
-        </View>
-      </View>
-
-      <View style={stylesHome.viewText}>
-        <Text style={stylesHome.tarefasText}>Tarefas:</Text>
-      </View>
       <FlatList
         data={tasks}
         keyExtractor={(item) => item._id}
@@ -194,7 +178,55 @@ const EntrarScreen = () => {
           </TouchableOpacity>
         )}
       />
-    </SafeAreaView>
+
+      <View style={stylesHome.centeredButtonModalCreateTask} >
+        <Modal animationType="fade" transparent={true} visible={modalVisible}>
+          <View style={stylesHome.centeredView}>
+            <View style={stylesHome.modalView}>
+              <Text style={stylesHome.modalText}>Criar uma tarefa</Text>
+              <TextInput
+                placeholder="Título da tarefa"
+                value={newTask.name}
+                onChangeText={(text) => setNewTask({ ...newTask, name: text })}
+              />
+              <TextInput
+                placeholder="Descrição da tarefa"
+                value={newTask.description}
+                onChangeText={(text) =>
+                  setNewTask({ ...newTask, description: text })
+                }
+              />
+              <View style={stylesHome.buttonsModal}>
+                <Pressable
+                  style={[stylesHome.button, stylesHome.buttonCreate]}
+                  onPress={() => {
+                    setModalVisible(!modalVisible);
+                    createTask();
+                  }}
+                >
+                  <Text style={stylesHome.textPlus}> + </Text>
+                </Pressable>
+
+                <Pressable
+                  style={[stylesHome.buttonSair, stylesHome.buttonClose]}
+                  onPress={() => {
+                    setModalVisible(!modalVisible);
+                  }}
+                >
+                  <Text style={stylesHome.textSairModal}> Sair </Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
+        <Pressable
+          style={[stylesHome.button, stylesHome.buttonOpen]}
+          onPress={() => setModalVisible(true)}
+        >
+          <Text style={stylesHome.textPlus2}>+</Text>
+        </Pressable>
+      </View>
+    </View>
   );
 };
 
